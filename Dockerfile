@@ -48,6 +48,11 @@ RUN yum update -y && yum install -y ipa-mincho-fonts \
     ipa-pgothic-font \
     gnome-session && yum clean all; rm -rf /var/cache/yum
     
+RUN yum groupinstall -y "Japanese Support"
+RUN sed -i -e 's/LANG=\"en_US.UTF-8\"/#LANG=\"en_US.UTF-8\"/g' /etc/sysconfig/i18n
+RUN echo "LANG=\"ja_JP.UTF-8\"" >> /etc/sysconfig/i18n
+RUN echo "SYSFONT=\"latarcyrheb-sun16\"" >> /etc/sysconfig/i18n
+
 USER kioskuser
 ENV LANG ja_JP.utf8
 RUN export LANG=ja_JP.UTF-8
