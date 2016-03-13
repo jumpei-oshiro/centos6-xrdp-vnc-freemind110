@@ -39,6 +39,15 @@ RUN /bin/echo "/usr/local/freemind/freemind.sh" >> /home/kioskuser/.vnc/xstartup
 WORKDIR /usr/bin
 RUN sed -i -e 's/1024x768/1920x1024/g' vncserver
 
+#
+# ipa font
+#
+RUN yum update -y && yum install -y ipa-mincho-fonts \
+    ipa-gothic-fonts \
+    ipa-pmincho-fonts \
+    ipa-pgothic-font \
+    gnome-session && yum clean all; rm -rf /var/cache/yum
+    
 USER kioskuser
 
 #EXPOSE 5901
