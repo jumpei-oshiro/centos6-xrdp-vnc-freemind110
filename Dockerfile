@@ -50,6 +50,7 @@ RUN yum update -y && yum install -y ipa-mincho-fonts \
     
 USER kioskuser
 ENV LANG ja_JP.utf8
+RUN export LANG=ja_JP.UTF-8
 
 #EXPOSE 5901
 #ENTRYPOINT ["/usr/bin/vncserver","-fg"]
