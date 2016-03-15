@@ -47,6 +47,10 @@ RUN yum update -y && yum install -y ipa-mincho-fonts \
     ipa-pgothic-font \
     gnome-session && yum clean all; rm -rf /var/cache/yum
 
+RUN yum -y groupinstall "X Window System"
+RUN yum -y groupinstall "GNOME Desktop Environment"
+RUN yum groupinstall -y 'Desktop'
+RUN yum groupinstall -y fonts
 RUN yum groupinstall -y "Japanese Support" 
 RUN sed -i -e 's/LANG=\"en_US.UTF-8\"/#LANG=\"en_US.UTF-8\"/g' /etc/sysconfig/i18n
 RUN echo "LANG=\"ja_JP.UTF-8\"" >> /etc/sysconfig/i18n
