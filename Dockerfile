@@ -31,7 +31,6 @@ RUN mv /tmp/freemind /usr/local/
 RUN ls -l /usr/local/freemind
 RUN rm -f /usr/local/freemind/freemind-bin-max-1.1.0_Beta_2.zip
 RUN chmod 755 /usr/local/freemind/freemind.sh
-RUN /bin/echo "/usr/local/freemind/freemind.sh" >> /home/kioskuser/.vnc/xstartup 
 
 #----------------------------
 # tag:1920x1024
@@ -47,8 +46,8 @@ RUN yum update -y && yum install -y ipa-mincho-fonts \
     ipa-pmincho-fonts \
     ipa-pgothic-font \
     gnome-session && yum clean all; rm -rf /var/cache/yum
-    
-RUN yum groupinstall -y "Japanese Support"
+
+RUN yum groupinstall -y "Japanese Support" 
 RUN sed -i -e 's/LANG=\"en_US.UTF-8\"/#LANG=\"en_US.UTF-8\"/g' /etc/sysconfig/i18n
 RUN echo "LANG=\"ja_JP.UTF-8\"" >> /etc/sysconfig/i18n
 RUN echo "SYSFONT=\"latarcyrheb-sun16\"" >> /etc/sysconfig/i18n
@@ -63,18 +62,25 @@ RUN sed -i -e 's/LAYOUT=\"us\"/LAYOUT=\"jp\"/g' /etc/sysconfig/keyboard
 #----------------------------
 # test
 #----------------------------
-WORKDIR /etc/sysconfig/vncservers
-RUN sed -i -e 's/\# VNCSERVERS=\"2:myusername\"/VNCSERVERARGS\[2\]=\"-geometry 800x600 -nolisten tcp -localhost\"/g' > vncservers
+#WORKDIR /etc/sysconfig/
+#RUN sed -i -e 's/\# VNCSERVERS=\"2:myusername\"/VNCSERVERARGS\[2\]=\"-nolisten tcp -localhost\"/g' > vncservers
 
 USER kioskuser
 ENV LANG ja_JP.utf8
 RUN export LANG=ja_JP.UTF-8
 
 WORKDIR /home/kioskuser/.vnc/
-RUN echo export GTK_IM_MODULE=ibus >> xstartup
-RUN echo export XMODIFIERS=@im=ibus >> xstartup
-RUN echo export QT_IM_MODULE=ibus >> xstartup
-RUN echo ibus-daemon -drx >> xstartup
+ADD xstartup /home/kioskuser/.vnc/
+USER root
+WORKDIR /home/kioskuser/.vnc/
+RUN chmod 775 xstartup
+RUN chown kioskuser:kioskuser xstartup
+RUN /bin/echo "/usr/local/freemind/freemind.sh" >> /home/kioskuser/.vnc/xstartup
+USER kioskuser
+#RUN echo export GTK_IM_MODULE=ibus >> xstartup
+#RUN echo export XMODIFIERS=@im=ibus >> xstartup
+#RUN echo export QT_IM_MODULE=ibus >> xstartup
+#RUN echo ibus-daemon -drx >> xstartup
 
 #EXPOSE 5901
 #ENTRYPOINT ["/usr/bin/vncserver","-fg"]
