@@ -53,16 +53,28 @@ RUN sed -i -e 's/LANG=\"en_US.UTF-8\"/#LANG=\"en_US.UTF-8\"/g' /etc/sysconfig/i1
 RUN echo "LANG=\"ja_JP.UTF-8\"" >> /etc/sysconfig/i18n
 RUN echo "SYSFONT=\"latarcyrheb-sun16\"" >> /etc/sysconfig/i18n
 
-#
+#----------------------------
 # keyboard
-#
+#----------------------------
 RUN sed -i -e 's/KEYTABLE=\"us\"/KEYTABLE=\"jp106\"/g' /etc/sysconfig/keyboard 
 RUN sed -i -e 's/MODEL=\"pc105+inet\"/MODEL=\"jp106\"/g' /etc/sysconfig/keyboard 
 RUN sed -i -e 's/LAYOUT=\"us\"/LAYOUT=\"jp\"/g' /etc/sysconfig/keyboard
 
+#----------------------------
+# test
+#----------------------------
+WORKDIR /etc/sysconfig/vncservers
+RUN sed -i -e 's/\# VNCSERVERS=\"2:myusername\"/VNCSERVERARGS\[2\]=\"-geometry 800x600 -nolisten tcp -localhost\"/g' > vncservers
+
 USER kioskuser
 ENV LANG ja_JP.utf8
 RUN export LANG=ja_JP.UTF-8
+
+WORKDIR /home/kioskuser/.vnc/
+RUN echo export GTK_IM_MODULE=ibus >> xstartup
+RUN echo export XMODIFIERS=@im=ibus >> xstartup
+RUN echo export QT_IM_MODULE=ibus >> xstartup
+RUN echo ibus-daemon -drx >> xstartup
 
 #EXPOSE 5901
 #ENTRYPOINT ["/usr/bin/vncserver","-fg"]
