@@ -18,10 +18,10 @@ fi
 esac
 fi
 if [ -x /etc/X11/xinit/xinitrc ]; then
-exec /etc/X11/xinit/xinitrc
+exec /etc/X11/xinit/xinitrc &&
 fi
 if [ -f /etc/X11/xinit/xinitrc ]; then
-exec sh /etc/X11/xinit/xinitrc &&
+exec sh /etc/X11/xinit/xinitrc
 fi
 [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
 xsetroot -solid grey
