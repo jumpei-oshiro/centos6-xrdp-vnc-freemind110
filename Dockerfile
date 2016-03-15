@@ -72,14 +72,17 @@ RUN sed -i -e 's/LAYOUT=\"us\"/LAYOUT=\"jp\"/g' /etc/sysconfig/keyboard
 USER kioskuser
 ENV LANG ja_JP.utf8
 RUN export LANG=ja_JP.UTF-8
+RUN echo kioskuser | passwd --stdin kioskuser
 
 WORKDIR /home/kioskuser/.vnc/
 ADD xstartup /home/kioskuser/.vnc/
+
 USER root
 WORKDIR /home/kioskuser/.vnc/
 RUN chmod 775 xstartup
 RUN chown kioskuser:kioskuser xstartup
-RUN /bin/echo "/usr/local/freemind/freemind.sh" >> /home/kioskuser/.vnc/xstartup
+RUN /bin/echo "/usr/local/freemind/freemind.sh &" >> /home/kioskuser/.vnc/xstartup
+
 USER kioskuser
 #RUN echo export GTK_IM_MODULE=ibus >> xstartup
 #RUN echo export XMODIFIERS=@im=ibus >> xstartup
