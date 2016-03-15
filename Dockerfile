@@ -69,10 +69,12 @@ RUN sed -i -e 's/LAYOUT=\"us\"/LAYOUT=\"jp\"/g' /etc/sysconfig/keyboard
 #WORKDIR /etc/sysconfig/
 #RUN sed -i -e 's/\# VNCSERVERS=\"2:myusername\"/VNCSERVERARGS\[2\]=\"-nolisten tcp -localhost\"/g' > vncservers
 
+RUN echo kioskuser | passwd --stdin kioskuser
+
 USER kioskuser
 ENV LANG ja_JP.utf8
 RUN export LANG=ja_JP.UTF-8
-RUN echo kioskuser | passwd --stdin kioskuser
+
 
 WORKDIR /home/kioskuser/.vnc/
 ADD xstartup /home/kioskuser/.vnc/
