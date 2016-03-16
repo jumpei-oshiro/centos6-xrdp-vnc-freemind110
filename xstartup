@@ -3,30 +3,30 @@
 [ -r /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
 export LANG
 export SYSFONT
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
 vncconfig -iconic &
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
-OS=uname -s
+OS=`uname -s`
 if [ $OS = 'Linux' ]; then
-case "$WINDOWMANAGER" in
-gnome)
-if [ -e /etc/SuSE-release ]; then
-PATH=$PATH:/opt/gnome/bin
-export PATH
-fi
-;;
-esac
+  case "$WINDOWMANAGER" in
+    *gnome*)
+      if [ -e /etc/SuSE-release ]; then
+        PATH=$PATH:/opt/gnome/bin
+        export PATH 
+      fi
+      ;;
+  esac
 fi
 if [ -x /etc/X11/xinit/xinitrc ]; then
-exec /etc/X11/xinit/xinitrc
+  exec /etc/X11/xinit/xinitrc &
 fi
 if [ -f /etc/X11/xinit/xinitrc ]; then
-exec sh /etc/X11/xinit/xinitrc
+  exec sh /etc/X11/xinit/xinitrci & 
 fi
 [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
 xsetroot -solid grey
 xterm -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
-twm & 
-unset DBUS_SESSION_ADDRESS
-OS=`uname -s`
-gnome-session&
+twm & ibus-daemon -drx &
