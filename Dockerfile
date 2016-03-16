@@ -114,10 +114,6 @@ RUN chmod 775 xstartup
 RUN chown kioskuser:kioskuser xstartup
 RUN /bin/echo "exec sh /usr/local/freemind/freemind.sh" >> /home/kioskuser/.vnc/xstartup
 USER kioskuser
-#RUN echo export GTK_IM_MODULE=ibus >> xstartup
-#RUN echo export XMODIFIERS=@im=ibus >> xstartup
-#RUN echo export QT_IM_MODULE=ibus >> xstartup
-#RUN echo ibus-daemon -drx >> xstartup
 
 #EXPOSE 5901
 #ENTRYPOINT ["/usr/bin/vncserver","-fg"]
